@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Small test project for the comfort index.
+       We reference the api project so the tests can hit the real service. -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- the thing we are testing -->
+    <ProjectReference Include="..\FidenzWeatherApi\FidenzWeatherApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- so [Fact] / [Theory] / Assert are available without a using line everywhere -->
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
