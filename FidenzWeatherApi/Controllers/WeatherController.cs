@@ -69,6 +69,13 @@ namespace FidenzWeatherApi.Controllers
                 var temperature =
                     weather.Main.Temp - 273.15;
 
+                    double a = 17.27;
+                    double b =237.7;
+
+                    double dp = Math.Log(weather.Main.Humidity/100.0)+(a*temperature)/(b+temperature);
+                    double dewpoint = (b*dp)/(a-dp);
+
+
                 var score =
                     _comfortIndexService.Calculate(
                         temperature,
@@ -76,7 +83,8 @@ namespace FidenzWeatherApi.Controllers
                         weather.Wind.Speed,
                         weather.Clouds.All,
                         weather.Main.Pressure,
-                        weather.Visibility);
+                        weather.Visibility,
+                        dewpoint);
 
                 results.Add(new WeatherResult
                 {

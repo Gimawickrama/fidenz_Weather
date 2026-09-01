@@ -19,11 +19,11 @@ public class ComfortIndexServiceTests
 
     [Theory]
     [InlineData(22, 100.0)]   // 22 °C = the sweet spot
-    [InlineData(25, 94.75)]   // warm-ish, still nice
-    [InlineData(30, 86.0)]    // getting uncomfortable
-    [InlineData(40, 68.5)]    // properly hot
-    [InlineData(50, 65.0)]    // temp part already at the floor
-    [InlineData(100, 65.0)]   // extreme, same floor as before
+    [InlineData(25, 95.5)]   // warm-ish, still nice
+    [InlineData(30, 88.0)]    // getting uncomfortable
+    [InlineData(40, 73.0)]    // properly hot
+    [InlineData(50, 70.0)]    // temp part already at the floor
+    [InlineData(100, 70.0)]   // extreme, same floor as before
     public void Temperature_PartOfTheScore(double temperature, double expected)
     {
         // everything else ideal so only temperature moves the needle
@@ -33,7 +33,8 @@ public class ComfortIndexServiceTests
             windSpeed: 3,
             cloudiness: 30,
             pressure: 1013,
-            visibility: 10000);
+            visibility: 10000,
+            dewPoint:12);
 
         Assert.Equal(expected, actual, 2);
     }
@@ -41,8 +42,8 @@ public class ComfortIndexServiceTests
     [Fact]
     public void Temperature_IdealStillBeatsHot()
     {
-        var ideal = _service.Calculate(22, 50, 3, 30, 1013, 10000);
-        var hot = _service.Calculate(35, 50, 3, 30, 1013, 10000);
+        var ideal = _service.Calculate(22, 50, 3, 30, 1013, 10000,12);
+        var hot = _service.Calculate(35, 50, 3, 30, 1013, 10000,12);
 
         Assert.True(ideal > hot);
     }
@@ -68,7 +69,8 @@ public class ComfortIndexServiceTests
             windSpeed: 3,
             cloudiness: 30,
             pressure: 1013,
-            visibility: visibility);
+            visibility: visibility,
+            dewPoint:12);
 
         Assert.Equal(expected, actual, 2);
     }
@@ -76,8 +78,8 @@ public class ComfortIndexServiceTests
     [Fact]
     public void Visibility_ClearSkyScoresHigherThanFog()
     {
-        var clear = _service.Calculate(22, 50, 3, 30, 1013, 9000);
-        var foggy = _service.Calculate(22, 50, 3, 30, 1013, 1500);
+        var clear = _service.Calculate(22, 50, 3, 30, 1013, 9000,12);
+        var foggy = _service.Calculate(22, 50, 3, 30, 1013, 1500,12);
 
         Assert.True(clear > foggy);
     }

@@ -10,25 +10,22 @@ namespace FidenzWeatherApi.Services
             double windSpeed,
             double cloudiness,
             double pressure,
-            double visibility)
+            double visibility,
+            double dewPoint)
         {
-            double temperatureScore =
-                CalculateTemperatureScore(temperature);
+            double temperatureScore =CalculateTemperatureScore(temperature);
 
-            double humidityScore =
-                CalculateHumidityScore(humidity);
+            double humidityScore =CalculateHumidityScore(humidity);
 
-            double windScore =
-                CalculateWindScore(windSpeed);
+            double windScore =CalculateWindScore(windSpeed);
 
-            double cloudScore =
-                CalculateCloudScore(cloudiness);
+            double cloudScore =CalculateCloudScore(cloudiness);
 
-            double pressureScore =
-                CalculatePressureScore(pressure);
+            double pressureScore =CalculatePressureScore(pressure);
 
-            double visibilityScore =
-                CalculateVisibilityScore(visibility);
+            double visibilityScore =CalculateVisibilityScore(visibility);
+
+            double dewPointScore = CalculatedewPointScore (dewPoint);
 
             // Comfort Index weights
             // Temperature 35%
@@ -39,20 +36,20 @@ namespace FidenzWeatherApi.Services
             // Visibility  10%
 
             double finalScore =
-                (temperatureScore * 0.35) +
-                (humidityScore * 0.20) +
+                (temperatureScore * 0.30) +
+                (humidityScore * 0.15) +
                 (windScore * 0.15) +
                 (cloudScore * 0.10) +
                 (pressureScore * 0.10) +
-                (visibilityScore * 0.10);
+                (visibilityScore * 0.10) +
+                (dewPointScore * 0.10);
 
             return Math.Round(
                 Math.Clamp(finalScore, 0, 100),
                 2);
         }
 
-        private double CalculateTemperatureScore(
-            double temperature)
+        private double CalculateTemperatureScore(double temperature)
         {
             const double idealTemperature = 22;
 
@@ -65,8 +62,7 @@ namespace FidenzWeatherApi.Services
             return Math.Clamp(score, 0, 100);
         }
 
-        private double CalculateHumidityScore(
-            double humidity)
+        private double CalculateHumidityScore(double humidity)
         {
             const double idealHumidity = 50;
 
@@ -79,8 +75,7 @@ namespace FidenzWeatherApi.Services
             return Math.Clamp(score, 0, 100);
         }
 
-        private double CalculateWindScore(
-            double windSpeed)
+        private double CalculateWindScore(double windSpeed)
         {
             const double idealWindSpeed = 3;
 
@@ -93,8 +88,7 @@ namespace FidenzWeatherApi.Services
             return Math.Clamp(score, 0, 100);
         }
 
-        private double CalculateCloudScore(
-            double cloudiness)
+        private double CalculateCloudScore(double cloudiness)
         {
             const double idealCloudiness = 30;
 
@@ -107,8 +101,7 @@ namespace FidenzWeatherApi.Services
             return Math.Clamp(score, 0, 100);
         }
 
-        private double CalculatePressureScore(
-            double pressure)
+        private double CalculatePressureScore(double pressure)
         {
             const double idealPressure = 1013;
 
@@ -121,8 +114,7 @@ namespace FidenzWeatherApi.Services
             return Math.Clamp(score, 0, 100);
         }
 
-        private double CalculateVisibilityScore(
-            double visibility)
+        private double CalculateVisibilityScore(double visibility)
         {
             // OpenWeatherMap visibility is measured in meters.
             // 10 km or more is considered excellent visibility.
@@ -131,6 +123,15 @@ namespace FidenzWeatherApi.Services
                 (visibility / 10000.0) * 100;
 
             return Math.Clamp(score, 0, 100);
+        }
+
+        private double CalculatedewPointScore (double dewPoint)
+        {
+            const double idealDewPoint =12;
+            double difference =Math.Abs ( dewPoint-idealDewPoint);
+            double score = 100 - (difference *4);
+            return Math.Clamp (score,0,100);
+
         }
     }
 }

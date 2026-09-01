@@ -8,6 +8,8 @@ namespace FidenzWeatherApi.Services.Interfaces
             double windSpeed,
             double cloudiness,
             double pressure,
-            double visibility);
+            double visibility,
+            double dewPoint);
+           
     }
 }
